@@ -2,10 +2,10 @@ from func_aux import *
 
 def func_44(estado,jogador):
     # Define weights for different evaluation factors
-    SCORE_WEIGHT = 1.0
-    SEEDS_WEIGHT = 0.5
-    PROGRESS_WEIGHT = 0.3
-    PITS_WEIGHT = 0.2
+    SCORE_WEIGHT = 1
+    SEEDS_WEIGHT = 1
+    PROGRESS_WEIGHT = 1
+    PITS_WEIGHT = 1
 
     # Get the player's score and the opponent's score
     player_score = estado.state[estado.SOUTH_SCORE_PIT] if jogador == 0 else estado.state[estado.NORTH_SCORE_PIT]
