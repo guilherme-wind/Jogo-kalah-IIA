@@ -1,20 +1,6 @@
 from kalah import *
 
-# ______________________________________________________________________________
-# Metodos Auxiliares
-
-class Jogador():
-    def __init__(self, nome, fun):
-        self.nome = nome
-        self.fun = fun
-    def display(self):
-        print(self.nome+" ")
-
-class JogadorAlfaBeta(Jogador):
-    def __init__(self, nome, depth,fun_eval):
-        self.nome = nome
-        self.fun = lambda game, state: alphabeta_cutoff_search_new(state,game,depth,eval_fn=fun_eval)
-
+##########  para ser independente dos jogos deveria devolver um método em string ou um atributo
 def joga11(game, jog1, jog2,verbose=False):
     ### jog1 e jog2 são jogadores com funções que dado um estado do jogo devolvem a jogada que escolheram
     ### devolve o par de jogadores, a lista de jogadas e o resultado
@@ -65,3 +51,36 @@ def jogaNpares(jogo,n,jog1,jog2):
     for x in tabelaPrim:
         tabela[x]=tabelaPrim[x]+tabelaSeg[x]
     return tabelaPrim,tabelaSeg,tabela,traduzPontos(tabela)
+
+def incorpora(tabela,tx):
+    for jog in tx:
+        if jog not in tabela:
+            tabela[jog]=tx[jog]
+        else:
+            tabela[jog]+=tx[jog]
+    
+def torneio(n,jogadores,jogo_id=0):
+    jogo=Kalah(jogo_id)  # jogo gerado ao calha entre os "justos"
+    tabela={}
+    for i in range(len(jogadores)-1):
+        jog1=jogadores[i]
+        for j in range(i+1,len(jogadores)):
+            jog2=jogadores[j]
+            _,_,_,tabelaX = jogaNpares(jogo,n,jog1,jog2)
+            incorpora(tabela,tabelaX)
+    return tabela
+
+# ______________________________________________________________________________
+# Metodos Auxiliares
+
+class Jogador():
+    def __init__(self, nome, fun):
+        self.nome = nome
+        self.fun = fun
+    def display(self):
+        print(self.nome+" ")
+
+class JogadorAlfaBeta(Jogador):
+    def __init__(self, nome, depth,fun_eval):
+        self.nome = nome
+        self.fun = lambda game, state: alphabeta_cutoff_search_new(state,game,depth,eval_fn=fun_eval)
